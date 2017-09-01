@@ -36,7 +36,9 @@ var Player = function(x, y) {
 };
 var count = 0;
 Player.prototype.update = function(dt){
+	this.checkCollisions();
     if(this.y === -11){
+    	    
         count++;
         //经过测试，经过3ms后，就可以实现到达河岸，并网页输出胜利指示，确定后，即可回到原位。
         if(count%3 === 2){
@@ -44,31 +46,34 @@ Player.prototype.update = function(dt){
             this.x = 200;
             this.y = 404;
         }
+
     }
 };
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+var CELL_WIDTH = 101;
+var CELL_HEIGHT = 83;
 Player.prototype.handleInput = function(movement) {
     switch (movement){
         case "left":
             if (this.x > 0) {
-                this.x -= 101;
+                this.x -= CELL_WIDTH;
             }
             break;
         case "right":
             if (this.x < 402) {
-                this.x += 101;
+                this.x += CELL_WIDTH;
             }
             break;
         case "up":
             if (this.y >= 55) {
-                this.y -= 83;
+                this.y -= CELL_HEIGHT;
             }
             break;
         case "down":
             if (this.y < 387) {
-                this.y += 83;
+                this.y += CELL_HEIGHT;
             }
             break;
     }
@@ -79,7 +84,7 @@ Player.prototype.checkCollisions = function(){
     for(var i=0;i<allEnemies.length;i++){
         //首先判断player和enemy是否在同一行（此处因为我所设置的player和enemy是每一行所在位置的y坐标是相同的）
         if(this.y === allEnemies[i].y){
-            if((Math.abs(this.x - allEnemies[i].x))<40){
+            if((Math.abs(this.x - allEnemies[i].x))<45){
                 this.x =200;
                 this.y =404;
             }
@@ -98,7 +103,7 @@ for(var i=0;i<6;i++){
     //i%3,将随机生成的六个敌人均匀分配至三行
     //将所有bugs都添加到allEnemies数组中
     allEnemies.push(bugs);
-};
+}
 
 var player = new Player(200,404);
 
